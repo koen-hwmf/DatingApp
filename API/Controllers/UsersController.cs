@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace API.Controllers
 {
-    public class UsersController : BaseApiController // Inherits routes from BaseApiController
+    public class UsersController : BaseApiController // Inherits routes from BaseApiController (/api/users/...)
     {
         private readonly DataContext _context;
 
