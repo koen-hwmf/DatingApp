@@ -31,11 +31,10 @@ export class ErrorInterceptor implements HttpInterceptor {
                   }
                 }
                 throw modalStateErrors.flat(); // flat() function is new es2019 array method. Returns single array from nested arrays. Set lib 2019 in tsconfig.json
+              } else if (typeof err.error === 'object') {
+                this.toastr.error(err.error.title, err.status); // changed err.statusText to err.error.title for display of correct error msg
               } else {
-                this.toastr.error(
-                  err.statusText === 'OK' ? 'Unauthorized' : err.statusText,
-                  err.status
-                );
+                this.toastr.error(err.error, err.status);
               }
               break;
             case 401:
