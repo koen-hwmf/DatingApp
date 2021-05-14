@@ -1,4 +1,5 @@
 ﻿using API.Entities;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -12,10 +13,10 @@ namespace API.Data
 {
     public class Seed
     {
-        public static async Task SeedUsers(DataContext context)
+        public static async Task SeedUsers(UserManager<AppUser> userManager)
         {
             // Check if we already have users in database and return if true
-            if (await context.Users.AnyAsync()) return;
+            if (await userManager.Users.AnyAsync()) return;
             
             // Get userdata from json file
             var userData = await System.IO.File.ReadAllTextAsync("Data/UserSeedData.json");
@@ -25,17 +26,15 @@ namespace API.Data
 
             foreach (var user in users)
             {
-                using var hmac = new HMACSHA512();
+                // using var hmac = new HMACSHA512();
 
                 user.UserName = user.UserName.ToLower(); // set username
-                user.PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes("Pa$$w0rd")); // create passwordhash
-                user.PasswordSalt = hmac.Key; // create passwordsalt
+                // user.PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes("Pa$$w0rd")); // create passwordhash
+                // user.PasswordSalt = hmac.Key; // create passwordsalt
 
                 // add tracking to user through Entity framework
-                context.Users.Add(user);
+                await userManager.CreateAsync(user, "Pa$$w0rd");
             }
-
-            await context.SaveChangesAsync();
         } 
     }
 }
