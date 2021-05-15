@@ -11,6 +11,7 @@ import { NgxGalleryModule } from '@kolkov/ngx-gallery';
 import { TimeagoModule } from 'ngx-timeago';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { FileUploadModule } from 'ng2-file-upload';
+import { ModalModule } from 'ngx-bootstrap/modal';
 
 @NgModule({
   declarations: [],
@@ -28,6 +29,7 @@ import { FileUploadModule } from 'ng2-file-upload';
     TimeagoModule.forRoot(),
     FileUploadModule,
     FontAwesomeModule,
+    ModalModule.forRoot(),
   ],
   exports: [
     BsDropdownModule,
@@ -40,6 +42,7 @@ import { FileUploadModule } from 'ng2-file-upload';
     TimeagoModule,
     FontAwesomeModule,
     FileUploadModule,
+    ModalModule,
   ],
 })
 export class SharedModule {}
