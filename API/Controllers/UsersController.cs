@@ -47,7 +47,6 @@ namespace API.Controllers
         }
 
         // api/users/nina . {username} = query param. Name = "GetUser" = route param
-        [Authorize]
         [HttpGet("{username}", Name = "GetUser")]
         public async Task<ActionResult<MemberDto>> GetUser(string username)
         {
