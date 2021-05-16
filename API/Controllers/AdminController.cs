@@ -13,7 +13,7 @@ namespace API.Controllers
         private readonly UserManager<AppUser> _userManager;
         public AdminController(UserManager<AppUser> userManager)
         {
-        _userManager = userManager;
+            _userManager = userManager;
         }
 
         [Authorize(Policy = "RequireAdminRole")]
@@ -27,7 +27,7 @@ namespace API.Controllers
                 .Select(u => new
                 {   
                     u.Id,
-                    UserName = u.UserName,
+                    Username = u.UserName,
                     Roles = u.UserRoles.Select(r => r.Role.Name).ToList() 
                 })
                 .ToListAsync();
@@ -46,7 +46,7 @@ namespace API.Controllers
             var userRoles = await _userManager.GetRolesAsync(user);
             var result = await _userManager.AddToRolesAsync(user, selectedRoles.Except(userRoles));
 
-            if (result.Succeeded) return BadRequest("Failed to add to rules");
+            if (!result.Succeeded) return BadRequest("Failed to add to rules");
 
             result = await _userManager.RemoveFromRolesAsync(user, userRoles.Except(selectedRoles));
 
