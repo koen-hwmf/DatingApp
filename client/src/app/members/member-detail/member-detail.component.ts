@@ -8,8 +8,9 @@ import {
 import { TabDirective, TabsetComponent } from 'ngx-bootstrap/tabs';
 import { Member } from 'src/app/_models/member';
 import { Message } from 'src/app/_models/message';
-import { MembersService } from 'src/app/_services/members.service';
+import { faUserCircle } from '@fortawesome/free-solid-svg-icons';
 import { MessageService } from 'src/app/_services/message.service';
+import { PresenceService } from 'src/app/_services/presence.service';
 
 @Component({
   selector: 'app-member-detail',
@@ -23,9 +24,10 @@ export class MemberDetailComponent implements OnInit {
   galleryImages: NgxGalleryImage[];
   activeTab: TabDirective;
   messages: Message[] = [];
+  faUserCircle = faUserCircle;
 
   constructor(
-    private memberService: MembersService,
+    public presence: PresenceService,
     private messageService: MessageService,
     private route: ActivatedRoute
   ) {}
