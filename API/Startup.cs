@@ -8,6 +8,7 @@ using API.Extensions;
 using API.Interfaces;
 using API.Middleware;
 using API.Services;
+using API.SignalR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -41,6 +42,7 @@ namespace API
             services.AddControllers();
             services.AddCors(); // To prevent CORS error
             services.AddIdentityServices(_config);
+            services.AddSignalR();
 
             services.AddSwaggerGen(c =>
             {
@@ -64,8 +66,12 @@ namespace API
 
             app.UseRouting();
 
-            // Middleware to prevent CORS error. Must be in this exact location.
-            app.UseCors(policy => policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:4200"));
+            // Middleware to prevent CORS error. Must be in this exact location. (AllowCredentials is for SignalR)
+            app.UseCors(policy => policy
+                .AllowAnyHeader()
+                .AllowAnyMethod()
+                .AllowCredentials()
+                .WithOrigins("https://localhost:4200"));
 
             app.UseAuthentication(); // must go after UseCors and before UseAuthorization
             app.UseAuthorization(); // must go after UseCors and UseAuthentication
@@ -73,6 +79,7 @@ namespace API
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHub<PresenceHub>("hubs/presence");
             });
         }
     }
