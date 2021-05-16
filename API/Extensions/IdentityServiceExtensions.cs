@@ -38,6 +38,24 @@ namespace API.Extensions
                         ValidateIssuer = false, // Issuer = API application (backend)
                         ValidateAudience = false // Audience = Angular application (frontend)
                     };
+
+                    // SignalR authentication must go through query string as SignalR does not send headers
+                    options.Events = new JwtBearerEvents
+                    {
+                        OnMessageReceived = context =>
+                        {
+                            var accessToken = context.Request.Query["access_token"];
+                            var path = context.HttpContext.Request.Path;
+
+                            if (!string.IsNullOrEmpty(accessToken) && 
+                                path.StartsWithSegments("/hubs"))
+                            {
+                                context.Token = accessToken;
+                            }
+
+                            return Task.CompletedTask; 
+                        }
+                    };
                 }
                 );
 
